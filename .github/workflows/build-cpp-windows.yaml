@@ -50,8 +50,9 @@ jobs:
         cd $vcpkgTemp
         .\bootstrap-vcpkg.bat
         $env:VCPKG_DEFAULT_TRIPLET = "x64-windows-static"
-        # 安装全依赖链
-        .\vcpkg.exe install freetype harfbuzz icu graphite2 zlib libpng bzip2 --triplet x64-windows-static --head --verbose --clean-after-build
+        $env:VCPKG_DEBUG = "1"  # 启用 debug 日志 (替代 --verbose)
+        # 安装全依赖链 (移除 --verbose)
+        .\vcpkg.exe install freetype harfbuzz icu graphite2 zlib libpng bzip2 --triplet x64-windows-static --head --clean-after-build
         if ($LASTEXITCODE -ne 0) { exit 1 }
         .\vcpkg.exe integrate install
         Write-Output "vcpkg install complete. Toolchain: $vcpkgTemp\scripts\buildsystems\vcpkg.cmake"
